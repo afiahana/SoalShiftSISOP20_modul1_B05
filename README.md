@@ -220,3 +220,7 @@ Langkah-langkah:
 ``` -O pdkt_kusuma_$num ```
 - Simpan log messages wget kedalam sebuah file wget.log . Disini kita menggunakan -a adalah untuk logfile yang sudah ada tidak ter-overwrite. Karena kita ingin menyimpan semua, maka di append saja dengan -a
 ``` -a wget.log ```
+
+#### 3b. Karena kalian gak suka ribet, kalian membuat penjadwalan untuk menjalankan script download gambar tersebut. Namun, script download tersebut hanya berjalan setiap 8 jam dimulai dari jam 6.05 setiap hari kecuali hari Sabtu
+Membuat crontab yang berjalan tiap hari kecuali hari Sabtu dan mulai tiap pukul 6.05 dengan interval 8 jam. Sehingga dia akan berjalan pukul 06.05, 14.05, 22.05 dan akan kembali mulai pukul 06.05 pada keesokan harinya kecuali hari Sabtu.
+``` 5 6/8 * * 1-5,7 /bin/bash /home/afiahana/Sisop/Modul1/Soal3/soal3.sh ```
