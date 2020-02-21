@@ -204,3 +204,19 @@ Alphabet="ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ"
 ### 3. 1 tahun telah berlalu sejak pencampakan hati Kusuma. Akankah sang pujaan hati kembali ke naungan Kusuma? Memang tiada maaf bagi Elen. Tapi apa daya hati yang sudah hancur, Kusuma masih terguncang akan sikap Elen. Melihat kesedihan Kusuma, kalian mencoba menghibur Kusuma dengan mengirimkan gambar kucing.
 
 #### 3a. Maka dari itu, kalian mencoba membuat script untuk mendownload 28 gambar dari "https://loremflickr.com/320/240/cat" menggunakan command wget dan menyimpan file dengan nama "pdkt_kusuma_NO" (contoh: pdkt_kusuma_1, pdkt_kusuma_2, pdkt_kusuma_3) serta jangan lupa untuk menyimpan log messages wget kedalam sebuah file "wget.log".
+```
+#!/bin/bash
+
+for (( num=1; num<=28; num=num+1 ))
+do
+wget https://loremflickr.com/320/240/cat -O pdkt_kusuma_$num -a wget.log
+done
+```
+Langkah-langkah:
+- Looping dari 1-28 karena kita ingin mendownload sebanyak 28 gambar dan untuk nanti penamaannya dari foto yang didownload
+- Download foto dari URL yang diberikan dengan penamaan "pdkt_kusuma_NO"
+``` wget https://loremflickr.com/320/240/cat ```
+- Rename foto yang kita download
+``` -O pdkt_kusuma_$num ```
+- Simpan log messages wget kedalam sebuah file wget.log . Disini kita menggunakan -a adalah untuk logfile yang sudah ada tidak ter-overwrite. Karena kita ingin menyimpan semua, maka di append saja dengan -a
+``` -a wget.log ```
