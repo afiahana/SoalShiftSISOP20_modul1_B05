@@ -121,8 +121,8 @@ dan menampilkan 10 row teratas setelah di-sort lagi dari kecil ke besar dengan
 ### 2. Pada suatu siang, laptop Randolf dan Afairuzr dibajak oleh seseorang dan kehilangan data-data penting. Untuk mencegah kejadian yang sama terulang kembali mereka meminta bantuan kepada Whits karena dia adalah seorang yang punya banyak ide. Whits memikirkan sebuah ide namun dia meminta bantuan kalian kembali agar ide tersebut cepat diselesaikan. Idenya adalah kalian
 
 #### 2a. Membuat sebuah script bash yang dapat menghasilkan password secara acak sebanyak 28 karakter yang terdapat huruf besar, huruf kecil, dan angka.
+Kode dibawah merandom 28 characters yang parameternya semua huruf alphabet baik huruf kapital dan bukan kapital serta angka 0 sampai 9. Setelah itu 28 karakter yang terbentuk akan dijadikan string dan disimpan di variabel password.
 ``` password=$(cat /dev/urandom | tr -dc _A-Za-z0-9 | head -c28) ```
-Kode diatas merandom 28 characters yang parameternya semua huruf alphabet baik huruf kapital dan bukan kapital serta angka 0 sampai 9. Setelah itu 28 karakter yang terbentuk akan dijadikan string dan disimpan di variabel password
 
 #### 2b. Password acak tersebut disimpan pada file berekstensi .txt dengan nama berdasarkan argumen yang diinputkan dan HANYA berupa alphabet.
 ```
@@ -167,7 +167,7 @@ Alphabet="ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ"
 ```
 - Melakukan enkripsi, yaitu setiap huruf di filename akan diubah sesuai dengan jam
 ``` tr "${alphabet:0:26}${Alphabet:0:26}" "${alphabet:${num}:26}${Alphabet:${num}:26}" ```
-```tr``` akan translate string awal dengan yang baru. Setelah itu ```"${alphabet:0:26}${Alphabet:0:26}"``` menerima input String dan menyimpan dia urutan ke berapa. Lalu ```"${alphabet:${num}:26}${Alphabet:${num}:26}"``` akan mengeshift karakter tersebut sesuai jam (yang tersimpan di variabel num)
+```tr``` akan translate string awal dengan yang baru. Setelah itu ```"${alphabet:0:26}${Alphabet:0:26}"``` menerima input String. Lalu ```"${alphabet:${num}:26}${Alphabet:${num}:26}"``` akan mengeshift karakter tersebut sesuai jam (yang tersimpan di variabel num)
 - Rename nama file yang lama dengan nama file yang baru
 ``` mv $nama $new.txt ```
 
@@ -186,3 +186,15 @@ new=$(echo $filename | tr [${alphabet:${num}:26}${Alphabet:${num}:26}] [${alphab
 
 mv $nama $new.txt
 ```
+Langkah-langkah:
+- Menyimpan argumen ke dalam variabel nama
+- Menyimpan jam terakhir dilakukannya perubahan terhadap file yang ingin namanya didekripsi ke variabel num
+- Memisahkan nama file dengan eksternsinya
+- Menjamin urutan a-z dan A-Z terulang kembali
+```
+alphabet="abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz"
+Alphabet="ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ"
+```
+- Melakukan dekripsi, yaitu setiap huruf di filename akan diubah sesuai dengan jam terakhir file tersebut diubah (enkripsi)
+``` tr [${alphabet:${num}:26}${Alphabet:${num}:26}] [${alphabet:0:26}${Alphabet:0:26}] ```
+```tr``` akan translate string awal dengan yang baru. Setelah itu ```[${alphabet:${num}:26}${Alphabet:${num}:26}]``` menerima input String. Lalu ```[${alphabet:0:26}${Alphabet:0:26}]"``` akan mengeshift karakter tersebut menjadi normal (keadaan dimana karakter belum di shift sesuai jam)
