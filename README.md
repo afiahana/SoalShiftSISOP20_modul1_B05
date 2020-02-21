@@ -198,3 +198,9 @@ Alphabet="ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ"
 - Melakukan dekripsi, yaitu setiap huruf di filename akan diubah sesuai dengan jam terakhir file tersebut diubah (enkripsi)
 ``` tr [${alphabet:${num}:26}${Alphabet:${num}:26}] [${alphabet:0:26}${Alphabet:0:26}] ```
 ```tr``` akan translate string awal dengan yang baru. Setelah itu ```[${alphabet:${num}:26}${Alphabet:${num}:26}]``` menerima input String. Lalu ```[${alphabet:0:26}${Alphabet:0:26}]"``` akan mengeshift karakter tersebut menjadi normal (keadaan dimana karakter belum di shift sesuai jam)
+- Rename nama file yang lama dengan nama file yang baru
+``` mv $nama $new.txt ```
+
+### 3. 1 tahun telah berlalu sejak pencampakan hati Kusuma. Akankah sang pujaan hati kembali ke naungan Kusuma? Memang tiada maaf bagi Elen. Tapi apa daya hati yang sudah hancur, Kusuma masih terguncang akan sikap Elen. Melihat kesedihan Kusuma, kalian mencoba menghibur Kusuma dengan mengirimkan gambar kucing.
+
+#### 3a. Maka dari itu, kalian mencoba membuat script untuk mendownload 28 gambar dari "https://loremflickr.com/320/240/cat" menggunakan command wget dan menyimpan file dengan nama "pdkt_kusuma_NO" (contoh: pdkt_kusuma_1, pdkt_kusuma_2, pdkt_kusuma_3) serta jangan lupa untuk menyimpan log messages wget kedalam sebuah file "wget.log".
