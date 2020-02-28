@@ -122,7 +122,8 @@ dan menampilkan 10 row teratas setelah di-sort lagi dari kecil ke besar dengan
 
 #### 2a. Membuat sebuah script bash yang dapat menghasilkan password secara acak sebanyak 28 karakter yang terdapat huruf besar, huruf kecil, dan angka.
 Kode dibawah merandom 28 characters yang parameternya semua huruf alphabet baik huruf kapital dan bukan kapital serta angka 0 sampai 9. Setelah itu 28 karakter yang terbentuk akan dijadikan string dan disimpan di variabel password.
-``` pass1=$(cat /dev/urandom | tr -dc A-Z | head -c10)
+``` 
+pass1=$(cat /dev/urandom | tr -dc A-Z | head -c10)
 pass2=$(cat /dev/urandom | tr -dc a-z | head -c9)
 pass3=$(cat /dev/urandom | tr -dc 0-9 | head -c9) 
 ```
