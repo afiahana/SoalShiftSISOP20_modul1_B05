@@ -122,16 +122,21 @@ dan menampilkan 10 row teratas setelah di-sort lagi dari kecil ke besar dengan
 
 #### 2a. Membuat sebuah script bash yang dapat menghasilkan password secara acak sebanyak 28 karakter yang terdapat huruf besar, huruf kecil, dan angka.
 Kode dibawah merandom 28 characters yang parameternya semua huruf alphabet baik huruf kapital dan bukan kapital serta angka 0 sampai 9. Setelah itu 28 karakter yang terbentuk akan dijadikan string dan disimpan di variabel password.
-``` password=$(cat /dev/urandom | tr -dc _A-Za-z0-9 | head -c28) ```
+``` pass1=$(cat /dev/urandom | tr -dc A-Z | head -c10)
+pass2=$(cat /dev/urandom | tr -dc a-z | head -c9)
+pass3=$(cat /dev/urandom | tr -dc 0-9 | head -c9) 
+```
 
 #### 2b. Password acak tersebut disimpan pada file berekstensi .txt dengan nama berdasarkan argumen yang diinputkan dan HANYA berupa alphabet.
 ```
-filename=$1
+#!/bin/bash
 
 if [[ $1 =~ ^[a-zA-Z]+$ ]]
 then 
-password=$(cat /dev/urandom | tr -dc _A-Za-z0-9 | head -c28)
-echo password=$password > /home/afiahana/Sisop/Modul1/Soal2/$1.txt
+pass1=$(cat /dev/urandom | tr -dc A-Z | head -c10)
+pass2=$(cat /dev/urandom | tr -dc a-z | head -c9)
+pass3=$(cat /dev/urandom | tr -dc 0-9 | head -c9)
+echo password=$pass1$pass2$pass3 > /home/afiahana/Sisop/Modul1/Soal2/$1.txt
 else
 echo "Nama File hanya boleh alphabet"
 fi
@@ -146,7 +151,7 @@ fi
 #!/bin/bash
 
 nama=$1
-num=`date +"%H"`
+num=`date -r $nama +"%H"`
 filename="${nama%.txt}"
 
 alphabet="abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz"
@@ -158,7 +163,7 @@ mv $nama $new.txt
 ```
 Langkah-langkah:
 - Menyimpan argumen ke dalam variabel nama
-- Menyimpan jam dilakukannya enkripsi ke variabel num
+- Menyimpan jam file last modified ke variabel num
 - Memisahkan nama file dengan eksternsinya
 - Menjamin urutan a-z dan A-Z terulang kembali
 ```
@@ -211,6 +216,41 @@ for (( num=1; num<=28; num=num+1 ))
 do
 wget https://loremflickr.com/320/240/cat -O pdkt_kusuma_$num -a wget.log
 done
+
+grep 'Location' wget.log >> location.log
+
+mkdir duplicate
+mkdir kenangan
+
+cd duplicate
+d=$(ls | grep -o '[0-9]*' | sort -nr | head -n 1)
+d=$(($d+1))
+
+cd ..
+cd kenangan
+k=$(ls | grep -o '[0-9]*' | sort -nr | head -n 1)
+k=$(($k+1))
+cd ..
+
+for ((x=1;x<=28;x=x+1))
+do
+	for ((y=$x+1;y<=28;y=y+1))
+	do
+		if diff -s "pdkt_kusuma_$x" "pdkt_kusuma_$y"
+		then 
+			mv pdkt_kusuma_$y ./duplicate/duplicate_$d
+			d=$(($d+1))
+		fi
+	done
+done
+
+for ((num=1;num<=28;num=num+1))
+do
+	mv pdkt_kusuma_$num ./kenangan/kenangan_$k
+	k=$(($k+1))
+done
+cat wget.log > wget.log.bak
+cat location.log > location.log.bak
 ```
 Langkah-langkah:
 - Looping dari 1-28 karena kita ingin mendownload sebanyak 28 gambar dan untuk nanti penamaannya dari foto yang didownload
@@ -226,3 +266,51 @@ Membuat crontab yang berjalan tiap hari kecuali hari Sabtu dan mulai tiap pukul 
 ``` 5 6-23/8 * * 1-5,7 /bin/bash /home/afiahana/Sisop/Modul1/Soal3/soal3.sh ```
 
 #### 3c. Maka dari itu buatlah sebuah script untuk mengidentifikasi gambar yang identik dari keseluruhan gambar yang terdownload tadi. Bila terindikasi sebagai gambar yang identik, maka sisakan 1 gambar dan pindahkan sisa file identik tersebut ke dalam folder ./duplicate dengan format filename "duplicate_nomor" (contoh : duplicate_200, duplicate_201). Setelah itu lakukan pemindahan semua gambar yang tersisa kedalam folder ./kenangan dengan format filename "kenangan_nomor" (contoh: kenangan_252, kenangan_253). Setelah tidak ada gambar di current directory, maka lakukan backup seluruh log menjadi ekstensi ".log.bak".
+
+Langkah-langkah:
+- Dapatkan location dari wget.log dan masukkan ke location.log
+``` grep 'Location' wget.log >> location.log ```
+- Make directory duplicate untuk foto yang identik dan make directory kenangan saat foto-foto sudah tidak ada yang identik
+```
+mkdir duplicate
+mkdir kenangan
+```
+- Dapatkan masing-masing nomor ke berapa foto yang ada di directory duplicate dan kenangan, sehingga saat memasukkan foto-foto baru ke sana, akan melanjutkan nomornya (seperti yang diminta di soal)
+```
+cd duplicate
+d=$(ls | grep -o '[0-9]*' | sort -nr | head -n 1)
+d=$(($d+1))
+
+cd ..
+cd kenangan
+k=$(ls | grep -o '[0-9]*' | sort -nr | head -n 1)
+k=$(($k+1))
+cd ..
+```
+- Setelah itu, bandingkan foto-foto yang ter-download identik apa tidak. Jika identik maka masukkan salah 1 foto itu ke directory duplicate. DIsini kami menggunakan ``` diff -s ``` untuk membandingkan kedua foto baris-perbaris dan jika sama/identik akan memberitahu kita
+```
+for ((x=1;x<=28;x=x+1))
+do
+	for ((y=$x+1;y<=28;y=y+1))
+	do
+		if diff -s "pdkt_kusuma_$x" "pdkt_kusuma_$y"
+		then 
+			mv pdkt_kusuma_$y ./duplicate/duplicate_$d
+			d=$(($d+1))
+		fi
+	done
+done
+```
+- Jika semua foto yang identik sudah dipindahkan ke directory duplicate, maka pindahkan semua foto yang ada di current directory ke directory kenangan
+```
+for ((num=1;num<=28;num=num+1))
+do
+	mv pdkt_kusuma_$num ./kenangan/kenangan_$k
+	k=$(($k+1))
+done
+```
+- Buat backup dari semua file log dengan ekstensi .log.bak . Kami menggunakan ``` > ``` agar overwrite file .log.bak karena file .log akan terupdate terus
+```
+cat wget.log > wget.log.bak
+cat location.log > location.log.bak
+```
